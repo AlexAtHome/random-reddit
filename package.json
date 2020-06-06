@@ -1,0 +1,31 @@
+{
+  "name": "random-reddit",
+  "version": "1.0.0",
+  "description": "Random Reddit posts and images",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "ts-node ./test",
+    "build": "tsc"
+  },
+  "keywords": [
+    "reddit",
+    "api",
+    "random",
+    "post",
+    "image",
+    "picture"
+  ],
+  "author": "Alexander Bolotskov <r3disrussian@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "reddit-wrapper-v2": "^1.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.11",
+    "dotenv": "^8.2.0",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
+  }
+}
