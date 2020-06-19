@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "start": "ts-node ./test",
+    "start": "ts-node ./misc/test",
     "build": "tsc"
   },
   "keywords": [

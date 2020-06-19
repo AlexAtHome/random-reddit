@@ -1,7 +1,8 @@
 
 import RedditAPI, { IRedditAPIOptions } from "reddit-wrapper-v2"
-
 export { IRedditAPIOptions } from 'reddit-wrapper-v2'
+
+import { getRandomItemFrom } from "./utils";
 
 const VERSION = '1.0.0'
 
@@ -39,9 +40,13 @@ export class RandomReddit {
    * Returns the random post from specified subreddit
    * @param subreddit - subreddit name (without `r/` part)
    */
-  async getPost(subreddit: string): Promise<any> {
-    const [, response] = await this._reddit.api.get(`/r/${subreddit}/random`)
-    const post = response[0].data.children[0]
+  async getPost(subreddit: string | string[]): Promise<any> {
+    const pickedSub: string = Array.isArray(subreddit) ? getRandomItemFrom(subreddit) : subreddit
+    const [, response] = await this._reddit.api.get(`/r/${pickedSub}/random`)
+    const post = Array.isArray(response) ? response[0].data.children[0] : response.data.children[0]
+    if (!post) {
+      return this.getPost(subreddit);
+    }
     return post;
   }
 
@@ -50,9 +55,9 @@ export class RandomReddit {
    * If the post doesn't have the image - repeats the request until it contains the image
    * @param subreddit - subreddit name (without `r/` part)
    */
-  async getImage(subreddit: string): Promise<string> {
+  async getImage(subreddit: string | string[]): Promise<string> {
     const post = await this.getPost(subreddit);
-    const hasImageLink = /(jpe?g|png|gif)/.test(post.data.url)
+    const hasImageLink = /(jpe?g|png|gif)/.test(post?.data?.url)
     if (!hasImageLink) {
       if (this._canLog) {
         console.warn("[random-reddit] No image link found! Repeating the process...")
