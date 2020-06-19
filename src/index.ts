@@ -42,8 +42,9 @@ export class RandomReddit {
    */
   async getPost(subreddit: string | string[]): Promise<any> {
     const pickedSub: string = Array.isArray(subreddit) ? getRandomItemFrom(subreddit) : subreddit
-    const [, response] = await this._reddit.api.get(`/r/${pickedSub}/random`)
-    const post = Array.isArray(response) ? response[0].data.children[0] : response.data.children[0]
+    const [, response] = await this._reddit.api.get(`/r/${pickedSub}/random?count=50`)
+    const children = Array.isArray(response) ? response[0].data.children : response.data.children
+    const post = getRandomItemFrom(children)
     if (!post) {
       return this.getPost(subreddit);
     }
