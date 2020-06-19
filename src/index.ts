@@ -4,7 +4,7 @@ import RedditAPI, { IRedditAPIOptions, API } from "reddit-wrapper-v2"
 import { getRandomItemFrom } from "./utils"
 import { assert } from "console"
 
-const VERSION = '1.0.0'
+const { version } = require('../require.json')
 
 /**
  * Reddit's random class for random posts
@@ -26,7 +26,7 @@ export class RandomReddit {
    */
   constructor(params: IRedditAPIOptions) {
     this._reddit = RedditAPI({
-      user_agent: `${process.platform}:grabbit:${VERSION} (by /u/mamoru-kun)`,
+      user_agent: `${process.platform}:grabbit:${version} (by /u/mamoru-kun)`,
       retry_on_wait: true,
       retry_on_server_error: 5,
       retry_delay: 5,

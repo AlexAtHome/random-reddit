@@ -17,6 +17,10 @@
     "picture"
   ],
   "author": "Alexander Bolotskov <r3disrussian@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mamoruuu/random-reddit.git"
+  },
   "license": "MIT",
   "dependencies": {
     "reddit-wrapper-v2": "^1.1.6"
