@@ -4,7 +4,7 @@ import RedditAPI, { IRedditAPIOptions, API } from "reddit-wrapper-v2"
 import { getRandomItemFrom } from "./utils"
 import { assert } from "console"
 
-const version = '1.1.0'
+const version = '1.2.0'
 
 /**
  * Reddit's random class for random posts
