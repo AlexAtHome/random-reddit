@@ -76,6 +76,9 @@ export class RandomReddit {
       retries += 1
       return this.getImage(subreddit)
     }
+    if (post.data.is_gallery) {
+      return RandomReddit._getRandomImageFromGallery(post)
+    }
     // here can be imgur `gifv` links sometimes, they have to be replaced w/ `gif` ones
     return post.data.url.replace('gifv', 'gif')
   }
@@ -95,5 +98,15 @@ export class RandomReddit {
       return this.getPostById(subreddit, id, retryLimit)
     }
     return response[0]?.data?.children[0]?.data
+  }
+
+  /**
+   * Returns an image from given post's gallery
+   * @param post - reddit post
+   */
+  static _getRandomImageFromGallery(post: any): string {
+    const validPosts = Object.values(post.media_metadata).filter((image: any) => image.status === 'valid')
+    const item: any = getRandomItemFrom(validPosts)
+    return item.s.u.replace(/\&amp\;/g, '&')
   }
 }
