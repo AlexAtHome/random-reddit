@@ -4,7 +4,7 @@ import RedditAPI, { IRedditAPIOptions, API } from "reddit-wrapper-v2"
 import { getRandomItemFrom } from "./utils"
 import { assert } from "console"
 
-const version = '1.1.0';
+const version = '1.1.0'
 
 /**
  * Reddit's random class for random posts
@@ -15,9 +15,9 @@ const version = '1.1.0';
  */
 export class RandomReddit {
   /** reddit api wrapper instance */
-  private _reddit: API;
+  private _reddit: API
   /** whether or not the debug mode is enabled */
-  private _canLog: boolean = false;
+  private _canLog: boolean = false
 
   /**
    * Creates new RandomReddit instance
@@ -78,5 +78,22 @@ export class RandomReddit {
     }
     // here can be imgur `gifv` links sometimes, they have to be replaced w/ `gif` ones
     return post.data.url.replace('gifv', 'gif')
+  }
+
+  /**
+   * Returns a specific post with given ID from specified subreddit
+   * @param subreddit - subreddit name
+   * @param id - id (ID36) of the post
+   * @param retryLimit - maximum amount of possible retries
+   */
+  async getPostById(id: string, subreddit: string, retryLimit: number = 10): Promise<any> {
+    let retries = 0
+    const [code, response] = await this._reddit.get(`/r/${subreddit}/comments/${id}`)
+    if (code !== 200) {
+      assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
+      retries += 1
+      return this.getPostById(subreddit, id, retryLimit)
+    }
+    return response[0]?.data?.children[0]?.data
   }
 }
