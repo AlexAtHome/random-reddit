@@ -47,7 +47,7 @@ export class RandomReddit {
     if (code !== 200) {
       assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
       retries += 1
-      return this.getPost(subreddit)
+      return this.getPost(subreddit, retryLimit)
     }
     const children = Array.isArray(response) ? response[0]?.data?.children : response?.data?.children
     const post = getRandomItemFrom(children || [])
@@ -74,7 +74,7 @@ export class RandomReddit {
       }
       assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
       retries += 1
-      return this.getImage(subreddit)
+      return this.getImage(subreddit, retryLimit)
     }
     if (post.data.is_gallery) {
       return RandomReddit._getRandomImageFromGallery(post)
