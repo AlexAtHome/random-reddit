@@ -3,7 +3,7 @@ import RedditAPI, { IRedditAPIOptions, API } from "reddit-wrapper-v2"
 
 import { ExceededRetriesError, getRandomItemFrom } from "./utils"
 
-const version = '1.2.0'
+const { version } = require('../package.json');
 
 /**
  * Reddit's random class for random posts
