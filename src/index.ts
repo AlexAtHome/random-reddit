@@ -1,8 +1,7 @@
 
 import RedditAPI, { IRedditAPIOptions, API } from "reddit-wrapper-v2"
 
-import { getRandomItemFrom } from "./utils"
-import { assert } from "console"
+import { ExceededRetriesError, getRandomItemFrom } from "./utils"
 
 const version = '1.2.0'
 
@@ -26,7 +25,7 @@ export class RandomReddit {
    */
   constructor(params: IRedditAPIOptions) {
     this._reddit = RedditAPI({
-      user_agent: `${process.platform}:grabbit:${version} (by /u/mamoru-kun)`,
+      user_agent: `${process.platform}:random-posts-:${version} (by /u/mamoru-kun)`,
       retry_on_wait: true,
       retry_on_server_error: 5,
       retry_delay: 5,
@@ -40,23 +39,11 @@ export class RandomReddit {
    * Returns the random post from specified subreddit
    * @param subreddit - subreddit name (without `r/` part)
    */
-  async getPost(subreddit: string | string[], retryLimit: number = 10): Promise<any> {
-    let retries = 0
+  async getPost(subreddit: string | string[], retryLimit: number = 10): Promise<any | null> {
     const pickedSub: string = Array.isArray(subreddit) ? getRandomItemFrom(subreddit) : subreddit
-    const [code, response] = await this._reddit.get(`/r/${pickedSub}/random?count=50`)
-    if (code !== 200) {
-      assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
-      retries += 1
-      return this.getPost(subreddit, retryLimit)
-    }
+    const [, response] = await this._get(`/r/${pickedSub}/random?count=50`, retryLimit)
     const children = Array.isArray(response) ? response[0]?.data?.children : response?.data?.children
-    const post = getRandomItemFrom(children || [])
-    if (!post) {
-      assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
-      retries += 1
-      return this.getPost(subreddit)
-    }
-    return post
+    return getRandomItemFrom(children || []) ?? null;
   }
 
   /**
@@ -64,17 +51,20 @@ export class RandomReddit {
    * If the post doesn't have the image - repeats the request until it contains the image
    * @param subreddit - subreddit name (without `r/` part)
    */
-  async getImage(subreddit: string | string[], retryLimit: number = 10): Promise<string> {
-    const post = await this.getPost(subreddit)
-    const hasImageLink = /(jpe?g|png|gif)/.test(post?.data?.url)
+  async getImage(subreddit: string | string[], retryLimit: number = 10): Promise<string | null> {
     let retries = 0
-    if (!hasImageLink) {
-      if (this._canLog) {
-        console.warn("[random-reddit] No image link found! Repeating the process...")
+    let post: any;
+    while (retries < retryLimit) {
+      post = await this.getPost(subreddit)
+      const hasImageURL = /(jpe?g|png|gif)/.test(post?.data?.url)
+      if (hasImageURL) {
+        break
       }
-      assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
       retries += 1
-      return this.getImage(subreddit, retryLimit)
+      if (retries === retryLimit) {
+        throw new ExceededRetriesError('No image URL found! Request retries limits exceeded!')
+      }
+      this._canLog && console.warn("[random-reddit] No image URL found! Repeating the process...")
     }
     if (post.data.is_gallery) {
       return RandomReddit._getRandomImageFromGallery(post)
@@ -89,15 +79,10 @@ export class RandomReddit {
    * @param id - id (ID36) of the post
    * @param retryLimit - maximum amount of possible retries
    */
-  async getPostById(id: string, subreddit: string, retryLimit: number = 10): Promise<any> {
-    let retries = 0
-    const [code, response] = await this._reddit.get(`/r/${subreddit}/comments/${id}`)
-    if (code !== 200) {
-      assert(retries >= retryLimit, '[random-reddit] Request retries limits exceeded!')
-      retries += 1
-      return this.getPostById(subreddit, id, retryLimit)
-    }
-    return response[0]?.data?.children[0]?.data
+  async getPostById(id: string, subreddit: string, retryLimit: number = 10): Promise<any | null> {
+    const [, response] = await this._get(`/r/${subreddit}/comments/${id}`, retryLimit);
+    console.log(response);
+    return response[0]?.data?.children[0]?.data ?? null;
   }
 
   /**
@@ -108,5 +93,31 @@ export class RandomReddit {
     const validPosts = Object.values(post.media_metadata).filter((image: any) => image.status === 'valid')
     const item: any = getRandomItemFrom(validPosts)
     return item.s.u.replace(/\&amp\;/g, '&')
+  }
+
+  private async _get(endpoint: string, retryLimit: number = 10): Promise<[number, any]> {
+    let retries = 0;
+    while (retries < retryLimit) {
+      this._canLog && console.log(`Trying to GET ${endpoint}. Retries: 0`);
+      let response;
+      try {
+        response = await this._reddit.get(endpoint);
+      } catch (error) {
+        throw error
+      }
+      switch (response?.[0]) {
+        case 200: // OK
+          return response;
+        case undefined:  // if Reddit-wrapper-v2 gets 403 error two times in a row, it doesn't throw any errors - it just returns undefined
+        case 403: // Access forbidden
+          throw new Error('Access denied to Reddit API!')
+      }
+
+      retries += 1
+      if (this._canLog && retries !== retryLimit) {
+        console.warn(`Failed to GET ${endpoint}. Retrying`);
+      }
+    }
+    throw new ExceededRetriesError()
   }
 }
