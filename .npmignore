@@ -3,3 +3,4 @@ src
 .env
 .gitignore
 tsconfig.json
+misc
