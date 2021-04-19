@@ -12,6 +12,12 @@ The class with functions that get random posts or images from specified subreddi
 
 You will get the app's ID under the "personal use script" line and app's secret hash.
 
+*WARNING*: The account you're trying to access the Reddit API with should have 2FA *disabled*, otherwise you will get errors like this one:
+```
+The token retrieved was undefined. The username which we couln't get a token for is: username_here
+```
+You can use another Reddit account without Two-Factor Authentication (make sure the password is strong enough though) and add it's username to the developers list in the [Authorized applications](https://www.reddit.com/prefs/apps) settings.
+
 ### Installation
 1. `npm install random-reddit`
 2. Create `RandomReddit` instance. Pass your Reddit credentials in the constructor. Options are took from the [`reddit-wrapper-v2` package](https://github.com/Javin-Ambridge/reddit-wrapper#reddit-api-options).  
