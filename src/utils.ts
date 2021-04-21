@@ -1,4 +1,4 @@
-import consola from 'consola'
+import consola, { LogLevel } from 'consola'
 import fetch from 'node-fetch'
 
 /**
@@ -39,3 +39,15 @@ export const getRandomImageFromGallery = (post: any): string => {
   const item: any = getRandomItemFrom(validPosts)
   return item.s.u.replace(/&amp;/g, '&')
 }
+
+const getLogLevel = (): number => {
+  let level = Number(process.env.RANDOM_REDDIT_LOG_LEVEL)
+  if (Number.isNaN(level)) {
+    level = Number(process.env.CONSOLA_LEVEL)
+  }
+  return Number.isNaN(level) ? LogLevel.Error : level
+}
+
+export const logger = consola.create({
+  level: getLogLevel(),
+})

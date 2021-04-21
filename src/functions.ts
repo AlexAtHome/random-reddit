@@ -1,5 +1,4 @@
-import consola from 'consola'
-import { ExceededRetriesError, getRandomImageFromGallery, getRandomItemFrom, makeRequest } from './utils'
+import { ExceededRetriesError, getRandomImageFromGallery, getRandomItemFrom, logger, makeRequest } from './utils'
 
 /**
  * Returns the random post from specified subreddit
@@ -10,7 +9,7 @@ export const getPost = async (subreddit: string | string[]): Promise<any | null>
   const response = await makeRequest(`/r/${pickedSub}/random.json?limit=1`)
   const children = Array.isArray(response) ? response[0]?.data?.children : response?.data?.children
   const child = Array.isArray(children) ? children[0] : children
-  consola.debug('Response', child.data)
+  logger.debug('Response', child.data)
   return child.data
 }
 
@@ -28,14 +27,14 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
     post = await getPost(subreddit)
     const hasImageURL = /(jpe?g|png|gif)/.test(post?.url)
     if (hasImageURL) {
-      consola.debug('Got an image!', post?.url)
+      logger.debug('Got an image!', post?.url)
       break
     }
     retries += 1
     if (retries === retryLimit) {
       throw new ExceededRetriesError('No image URL found! Request retries limits exceeded!')
     }
-    consola.warn('No image URL found! Repeating the process...')
+    logger.warn('No image URL found! Repeating the process...')
   }
   if (post.is_gallery) {
     return getRandomImageFromGallery(post)
