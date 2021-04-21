@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "ts-node ./misc/test",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint --ext .ts ."
   },
   "keywords": [
     "reddit",
@@ -31,6 +32,7 @@
     "@typescript-eslint/parser": "^4.22.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.24.0",
+    "eslint-config-airbnb-base": "^14.2.1",
     "prettier": "^2.2.1",
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
