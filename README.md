@@ -1,29 +1,26 @@
 # Random Reddit [![npm](https://img.shields.io/npm/v/random-reddit?style=flat-square)](https://www.npmjs.com/package/random-reddit)
 
-The class with functions that get random posts or images from specified subreddit.
+The set of functions that get random posts or images from specified subreddit.
 
 ## Usage
 
 ### Installation
 1. `npm install random-reddit`
-2. Create a `RandomReddit` instance.
-3. Use `getPost()` or `getImage()` from the instance.  
+2. Use `getPost()` or `getImage()` from the package.  
 
 ### Example
 
 ```js
-const { RandomReddit } = require('random-reddit')
-
-const reddit = new RandomReddit();
+const { getPost, getImage } = require('random-reddit')
 
 function async getPost() {
-  const post = await reddit.getPost('memes')
+  const post = await getPost('memes')
   console.log(post) // returns the reddit post object
   // ...
 }
 
 function async getImage() {
-  const image = await reddit.getImage('memes')
+  const image = await getImage('memes')
   console.log(image) // e.g. https://i.redd.it/sri113wns9351.png
 }
 ```
@@ -31,7 +28,7 @@ function async getImage() {
 #### `getPost()`
 
 ```ts
-RandomReddit.getPost(subreddit: string | string[]): Promise
+getPost(subreddit: string | string[]): Promise
 ```
 Returns the whole Reddit post.
 
@@ -41,7 +38,7 @@ Returns the whole Reddit post.
 #### `getImage()`
 
 ```ts
-RandomReddit.getImage(subreddit: string | string[], retryLimit?: number): Promise
+getImage(subreddit: string | string[], retryLimit?: number): Promise
 ```
 Returns the random post's image URL. If it won't find one - the request will be sent again until the `retryLimit` is reached.
 
@@ -52,7 +49,7 @@ Returns the random post's image URL. If it won't find one - the request will be 
 #### `getPostById()`
 
 ```ts
-RandomReddit.getPostById(id: string, subreddit: string): Promise
+getPostById(id: string, subreddit: string): Promise
 ```
 Returns specific post with given id (ID36) and specified subreddit.
 
