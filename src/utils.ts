@@ -1,3 +1,4 @@
+import consola from 'consola'
 import fetch from 'node-fetch'
 
 /**
@@ -5,10 +6,15 @@ import fetch from 'node-fetch'
  * @param endpoint - the endpoint to fetch
  */
 export const makeRequest = async (endpoint: string): Promise<any> => {
-  const response = await fetch(`https://reddit.com/${endpoint}`, {
+  const url = `https://reddit.com/${endpoint}`
+  consola.log(`HTTP GET ${url}`)
+  const response = await fetch(url, {
     method: 'GET',
   })
   const body = await response.json()
+  consola.log(`HTTP Successful GET ${endpoint}`)
+  // Here we pick the first one because it contains the posts list
+  // `body[1]` contains comments to the post
   return body[0]
 }
 

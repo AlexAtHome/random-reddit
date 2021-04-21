@@ -9,7 +9,9 @@ export const getPost = async (subreddit: string | string[]): Promise<any | null>
   const pickedSub: string = Array.isArray(subreddit) ? getRandomItemFrom(subreddit) : subreddit
   const response = await makeRequest(`/r/${pickedSub}/random.json?limit=1`)
   const children = Array.isArray(response) ? response[0]?.data?.children : response?.data?.children
-  return getRandomItemFrom(children || []) ?? null
+  const child = Array.isArray(children) ? children[0] : children
+  consola.debug('Response', child.data)
+  return child.data
 }
 
 /**
@@ -24,9 +26,9 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
     // Loop is required here because this method is supposed to returns something that is not `undefined`
     // eslint-disable-next-line no-await-in-loop
     post = await getPost(subreddit)
-    const hasImageURL = /(jpe?g|png|gif)/.test(post?.data?.url)
+    const hasImageURL = /(jpe?g|png|gif)/.test(post?.url)
     if (hasImageURL) {
-      consola.debug('Got an image!', post?.data?.url)
+      consola.debug('Got an image!', post?.url)
       break
     }
     retries += 1
@@ -35,11 +37,11 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
     }
     consola.warn('No image URL found! Repeating the process...')
   }
-  if (post.data.is_gallery) {
+  if (post.is_gallery) {
     return getRandomImageFromGallery(post)
   }
-  // here can be imgur `gifv` links sometimes, they have to be replaced w/ `gif` ones
-  return post.data.url.replace('gifv', 'gif')
+  // here can be imgur `.gifv` links sometimes, they have to be replaced w/ `gif` ones
+  return post.url.replace('gifv', 'gif')
 }
 
 /**
