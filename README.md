@@ -3,24 +3,10 @@
 The class with functions that get random posts or images from specified subreddit.
 
 ## Usage
-**Before installation**:
-1. Proceed to [Authorized applications](https://www.reddit.com/prefs/apps)
-2. Press the "Create another app" button
-3. Enter your application's name, its description and about and redirect uris
-4. Choose *"script"* in the list - _**that's important**_
-5. Press the "Create app" button
-
-You will get the app's ID under the "personal use script" line and app's secret hash.
-
-*WARNING*: The account you're trying to access the Reddit API with should have 2FA *disabled*, otherwise you will get errors like this one:
-```
-The token retrieved was undefined. The username which we couln't get a token for is: username_here
-```
-You can use another Reddit account without Two-Factor Authentication (make sure the password is strong enough though) and add it's username to the developers list in the [Authorized applications](https://www.reddit.com/prefs/apps) settings.
 
 ### Installation
 1. `npm install random-reddit`
-2. Create `RandomReddit` instance. Pass your Reddit credentials in the constructor. Options are took from the [`reddit-wrapper-v2` package](https://github.com/Javin-Ambridge/reddit-wrapper#reddit-api-options).  
+2. Create a `RandomReddit` instance.
 3. Use `getPost()` or `getImage()` from the instance.  
 
 ### Example
@@ -28,21 +14,15 @@ You can use another Reddit account without Two-Factor Authentication (make sure 
 ```js
 const { RandomReddit } = require('random-reddit')
 
-const reddit = new RandomReddit({
-  username: 'reddit_username',
-  password: 'reddit password',
-  app_id: 'reddit api app id',
-  api_secret: 'reddit api secret',
-  logs: true // specify this if you want logs from this package
-});
+const reddit = new RandomReddit();
 
-function async post() {
-  const post = await reddit.getPost('the_donald')
+function async getPost() {
+  const post = await reddit.getPost('memes')
   console.log(post) // returns the reddit post object
   // ...
 }
 
-function async image() {
+function async getImage() {
   const image = await reddit.getImage('memes')
   console.log(image) // e.g. https://i.redd.it/sri113wns9351.png
 }
@@ -50,34 +30,32 @@ function async image() {
 
 #### `getPost()`
 
-```js
-RandomReddit.getPosts(subreddit [, retryLimit]): Promise
+```ts
+RandomReddit.getPost(subreddit: string | string[]): Promise
 ```
 Returns the whole Reddit post.
 
 **Arguments**:
 - `subreddit` (`string | string[]`) - a subreddit to fetch the post from. You can also specify an array of subreddit names
-- `retryLimit` (`number`) - *optional*. Failed request retry limit. Default is 10.
 
 #### `getImage()`
 
-```js
-RandomReddit.getPosts(subreddit [, retryLimit]): Promise
+```ts
+RandomReddit.getImage(subreddit: string | string[], retryLimit?: number): Promise
 ```
-Returns the random post's image. If it won't find one - the request will be sent again.
+Returns the random post's image URL. If it won't find one - the request will be sent again until the `retryLimit` is reached.
 
 **Arguments**:
 - `subreddit` (`string | string[]`) - a subreddit to fetch the image from. You can also specify an array of subreddit names
-- `retryLimit` (`number`) - *optional*. Failed request retry limit. Default is 10.
+- `retryLimit` (`number`) - *optional*. Request retry limit. Default is 10.
 
 #### `getPostById()`
 
-```js
-RandomReddit.getPostById(id, subreddit [, retryLimit]): Promise
+```ts
+RandomReddit.getPostById(id: string, subreddit: string): Promise
 ```
 Returns specific post with given id (ID36) and specified subreddit.
 
 **Arguments**:
 - `id` (`string`) - post's id
 - `subreddit` (`string`) - a subreddit to fetch the post from
-- `retryLimit` (`number`) - *optional*. Failed request retry limit. Default is 10.

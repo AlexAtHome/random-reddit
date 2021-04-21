@@ -32,6 +32,7 @@ module.exports = {
       ts: 'never',
       js: 'never',
     }],
+    'class-methods-use-this': 'off',
     '@typescript-eslint/explicit-function-return-type': [
       'error',
       {
