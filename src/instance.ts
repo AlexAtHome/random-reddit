@@ -75,7 +75,7 @@ export class RandomReddit {
    */
   async getPostById(id: string, subreddit: string): Promise<any | null> {
     const response = await this._request(`/r/${subreddit}/comments/${id}.json`)
-    return response[0]?.data?.children[0]?.data ?? null
+    return response.data?.children[0] ?? null
   }
 
   /**
