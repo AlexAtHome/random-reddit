@@ -18,16 +18,12 @@ export const makeRequest = async (endpoint: string): Promise<any> => {
   return body[0]
 }
 
+/**
+ * Returns the random item from given array
+ * @param arr - the array of something
+ */
 export function getRandomItemFrom<T = any>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
-}
-
-export class ExceededRetriesError extends Error {
-  public type = 'ExceededRetriesError'
-
-  constructor(message?: string) {
-    super(message ?? 'Request retries limits exceeded!')
-  }
 }
 
 /**

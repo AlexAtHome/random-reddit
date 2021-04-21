@@ -1,4 +1,4 @@
-import { ExceededRetriesError, getRandomImageFromGallery, getRandomItemFrom, logger, makeRequest } from './utils'
+import { getRandomImageFromGallery, getRandomItemFrom, logger, makeRequest } from './utils'
 
 /**
  * Returns the random post from specified subreddit
@@ -18,7 +18,7 @@ export const getPost = async (subreddit: string | string[]): Promise<any | null>
  * If the post doesn't have the image - repeats the request until it contains the image
  * @param subreddit - subreddit name (without `r/` part)
  */
-export const getImage = async (subreddit: string | string[], retryLimit: number = 10): Promise<string | null> => {
+export const getImage = async (subreddit: string | string[], retryLimit: number = 10): Promise<string | undefined> => {
   let retries = 0
   let post: any
   while (retries < retryLimit) {
@@ -32,7 +32,7 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
     }
     retries += 1
     if (retries === retryLimit) {
-      throw new ExceededRetriesError('No image URL found! Request retries limits exceeded!')
+      return undefined
     }
     logger.warn('No image URL found! Repeating the process...')
   }
