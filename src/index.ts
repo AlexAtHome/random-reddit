@@ -106,11 +106,11 @@ export class RandomReddit {
         throw error
       }
       switch (response?.[0]) {
-      case 200: // OK
-        return response
-      case undefined: // if Reddit-wrapper-v2 gets 403 error two times in a row, it doesn't throw any errors - it just returns undefined
-      case 403: // Access forbidden
-        throw new Error('Access denied to Reddit API!')
+        case 200: // OK
+          return response
+        case undefined: // if Reddit-wrapper-v2 gets 403 error two times in a row, it doesn't throw any errors - it just returns undefined
+        case 403: // Access forbidden
+          throw new Error('Access denied to Reddit API!')
       }
 
       retries += 1

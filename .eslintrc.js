@@ -1,8 +1,6 @@
-const { triggerAsyncId } = require("async_hooks");
-
 module.exports = {
-  extends: ["airbnb-base"],
-  plugins: ['@typescript-eslint'],
+  extends: ['airbnb-base', 'plugin:prettier/recommended'],
+  plugins: ['@typescript-eslint', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
@@ -15,7 +13,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', '.ts'],
       },
     },
     'import/extensions': [
@@ -23,15 +21,17 @@ module.exports = {
       '.json',
     ],
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx']
+      '@typescript-eslint/parser': ['.ts']
     }
   },
   rules: {
-    semi: ["error", "never"],
-    indent: ["error", 2],
-    'linebreak-style': ["error", "unix"],
-    'no-underscore-dangle': "off",
+    'prettier/prettier': 'error',
+    'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
+    'import/extensions': ['error', 'ignorePackages', {
+      ts: 'never',
+      js: 'never',
+    }],
     '@typescript-eslint/explicit-function-return-type': [
       'error',
       {
@@ -43,28 +43,28 @@ module.exports = {
     '@typescript-eslint/naming-convention': [
       'error',
       {
-        "selector": "variable",
-        "types": ["boolean"],
-        "format": ["PascalCase"],
-        "prefix": ["is", "has"]
+        'selector': 'variable',
+        'types': ['boolean'],
+        'format': ['PascalCase'],
+        'prefix': ['is', 'has']
       },
       {
-        "selector": "memberLike",
-        "modifiers": ["private"],
-        "format": ["camelCase"],
-        "leadingUnderscore": "require"
+        'selector': 'memberLike',
+        'modifiers': ['private'],
+        'format': ['camelCase'],
+        'leadingUnderscore': 'require'
       },
       {
-        "selector": "interface",
-        "format": ["PascalCase"],
-        "custom": {
-          "regex": "^I[A-Z]",
-          "match": true
+        'selector': 'interface',
+        'format': ['PascalCase'],
+        'custom': {
+          'regex': '^I[A-Z]',
+          'match': true
         }
       },
       {
-        "selector": "typeLike",
-        "format": ["PascalCase"]
+        'selector': 'typeLike',
+        'format': ['PascalCase']
       }
     ]
   }
