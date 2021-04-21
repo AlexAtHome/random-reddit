@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "ts-node ./misc/test",
     "build": "tsc",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "lint:fix": "eslint --fix --ext .ts ."
   },
   "keywords": [
     "reddit",
