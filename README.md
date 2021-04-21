@@ -25,7 +25,19 @@ function async getImage() {
 }
 ```
 
-#### `getPost()`
+### Logs
+You can enable inner logs by setting the environment variable `RANDOM_REDDIT_LOG_LEVEL` to a number from 0 to 4.
+```bash
+RANDOM_REDDIT_LOG_LEVEL=4 node my_app.js
+```
+The logs are provided by the [`consola` package](https://www.npmjs.com/package/consola). So the log level can also be changed with `CONSOLA_LEVEL` env variable
+```bash
+CONSOLA_LEVEL=4 node my_app.js
+```
+
+## Functions
+
+### `getPost()`
 
 ```ts
 getPost(subreddit: string | string[]): Promise
@@ -35,7 +47,7 @@ Returns the whole Reddit post.
 **Arguments**:
 - `subreddit` (`string | string[]`) - a subreddit to fetch the post from. You can also specify an array of subreddit names
 
-#### `getImage()`
+### `getImage()`
 
 ```ts
 getImage(subreddit: string | string[], retryLimit?: number): Promise
@@ -46,7 +58,7 @@ Returns the random post's image URL. If it won't find one - the request will be 
 - `subreddit` (`string | string[]`) - a subreddit to fetch the image from. You can also specify an array of subreddit names
 - `retryLimit` (`number`) - *optional*. Request retry limit. Default is 10.
 
-#### `getPostById()`
+### `getPostById()`
 
 ```ts
 getPostById(id: string, subreddit: string): Promise
