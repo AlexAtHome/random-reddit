@@ -25,6 +25,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "consola": "^2.15.3",
     "reddit-wrapper-v2": "^1.1.6"
   },
   "devDependencies": {
