@@ -26,7 +26,7 @@ function async getImage() {
 ```
 
 ### Logs
-You can enable inner logs by setting the environment variable `RANDOM_REDDIT_LOG_LEVEL` to a number from 0 to 4.
+You can enable inner logs by setting the environment variable `RANDOM_REDDIT_LOG_LEVEL` to a number from -1 (no logs at all) to 5 (every log possible).
 ```bash
 RANDOM_REDDIT_LOG_LEVEL=4 node my_app.js
 ```

@@ -1,15 +1,17 @@
+import { RedditListingInterface, ThreadInterface } from 'reddit-interfaces'
+import { IPost } from './interface'
 import { getRandomImageFromGallery, getRandomItemFrom, logger, makeRequest } from './utils'
 
 /**
  * Returns the random post from specified subreddit
  * @param subreddit - subreddit name (without `r/` part)
  */
-export const getPost = async (subreddit: string | string[]): Promise<any | null> => {
+export const getPost = async (subreddit: string | string[]): Promise<IPost> => {
   const pickedSub: string = Array.isArray(subreddit) ? getRandomItemFrom(subreddit) : subreddit
-  const response = await makeRequest(`/r/${pickedSub}/random.json?limit=1`)
+  const response = await makeRequest<RedditListingInterface>(`/r/${pickedSub}/random.json?limit=1`)
   const children = Array.isArray(response) ? response[0]?.data?.children : response?.data?.children
   const child = Array.isArray(children) ? children[0] : children
-  logger.debug('Response', child.data)
+  logger.trace('Response', child.data)
   return child.data
 }
 
@@ -18,29 +20,32 @@ export const getPost = async (subreddit: string | string[]): Promise<any | null>
  * If the post doesn't have the image - repeats the request until it contains the image
  * @param subreddit - subreddit name (without `r/` part)
  */
-export const getImage = async (subreddit: string | string[], retryLimit: number = 10): Promise<string | undefined> => {
+export const getImage = async (subreddit: string | string[], retryLimit: number = 10): Promise<string> => {
   let retries = 0
-  let post: any
+  let post: IPost | null = await getPost(subreddit)
+  if (post === null) {
+    throw new Error(`Specified subreddit r/${subreddit} doesn't exist!`)
+  }
   while (retries < retryLimit) {
-    // Loop is required here because this method is supposed to returns something that is not `undefined`
-    // eslint-disable-next-line no-await-in-loop
-    post = await getPost(subreddit)
-    const hasImageURL = /(jpe?g|png|gif)/.test(post?.url)
+    const hasImageURL = /(jpe?g|png|gif)/.test(post?.url ?? '')
     if (hasImageURL) {
       logger.debug('Got an image!', post?.url)
       break
     }
     retries += 1
     if (retries === retryLimit) {
-      return undefined
+      return ''
     }
+    // Loop is required here because this method is supposed to returns something that is not `undefined`
+    // eslint-disable-next-line no-await-in-loop
+    post = await getPost(subreddit)
     logger.warn('No image URL found! Repeating the process...')
   }
-  if (post.is_gallery) {
+  if (post?.is_gallery) {
     return getRandomImageFromGallery(post)
   }
   // here can be imgur `.gifv` links sometimes, they have to be replaced w/ `gif` ones
-  return post.url.replace('gifv', 'gif')
+  return post?.url.replace('gifv', 'gif')
 }
 
 /**
@@ -48,7 +53,7 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
  * @param subreddit - subreddit name
  * @param id - id (ID36) of the post
  */
-export const getPostById = async (id: string, subreddit: string): Promise<any | null> => {
-  const response = await makeRequest(`/r/${subreddit}/comments/${id}.json`)
-  return response.data?.children[0]?.data ?? null
+export const getPostById = async (id: string, subreddit: string): Promise<IPost> => {
+  const response = await makeRequest<RedditListingInterface>(`/r/${subreddit}/comments/${id}.json`)
+  return ((response.data?.children[0].data as ThreadInterface) as IPost) ?? null
 }
