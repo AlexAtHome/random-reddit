@@ -50,5 +50,5 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
  */
 export const getPostById = async (id: string, subreddit: string): Promise<any | null> => {
   const response = await makeRequest(`/r/${subreddit}/comments/${id}.json`)
-  return response.data?.children[0] ?? null
+  return response.data?.children[0]?.data ?? null
 }
