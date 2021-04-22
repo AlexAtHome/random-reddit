@@ -35,6 +35,10 @@ The logs are provided by the [`consola` package](https://www.npmjs.com/package/c
 CONSOLA_LEVEL=4 node my_app.js
 ```
 
+### Typings
+
+Types are provided by the [`reddit-interfaces`](https://www.npmjs.com/package/reddit-interfaces) package. It's the peer dependency, so it you have to install it manually, if you use `random-reddit` with Typescript.
+
 ## Functions
 
 ### `getPost()`
