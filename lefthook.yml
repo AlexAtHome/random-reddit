@@ -1,0 +1,8 @@
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "src/**/*.ts"
+      run:
+        - prettier --write {staged_files}
+        - npm run lint {staged_files}
