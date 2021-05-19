@@ -4,8 +4,8 @@ export { LogLevel } from 'consola'
 
 /* eslint-disable camelcase */
 export interface IPost extends ThreadInterface {
-  media_metadata?: {
-    [hash: string]: unknown
+  media_metadata: {
+    [hash: string]: any
   }
   is_gallery?: boolean
 }
