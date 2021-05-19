@@ -4,3 +4,9 @@ src
 .gitignore
 tsconfig.json
 misc
+lefthook.yml
+.vscode
+.eslintignore
+.eslintrc.json
+.prettierrc.yml
+tsconfig.json
