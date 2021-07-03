@@ -16,7 +16,7 @@ export const makeRequest = async <T = any>(endpoint: string): Promise<T> => {
   consola.log(`HTTP Successful GET ${endpoint}`)
   // Here we pick the first one because it contains the posts list
   // `body[1]` contains comments to the post
-  return body[0] as T
+  return (Array.isArray(body) ? body[0] : body) as T
 }
 
 /**
