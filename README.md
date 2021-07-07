@@ -49,7 +49,7 @@ getPost(subreddit: string | string[]): Promise
 Returns the whole Reddit post.
 
 **Arguments**:
-- `subreddit` (`string | string[]`) - a subreddit to fetch the post from. You can also specify an array of subreddit names
+- `subreddit` (`string | string[]`) - a subreddit to fetch the post from. You can also specify an array of subreddit names. *Make sure there's no `r/` part in the value(s)*
 
 ### `getImage()`
 
