@@ -8,10 +8,10 @@ import { getRandomImageFromGallery, getRandomItemFrom, logger, makeRequest } fro
  */
 export const getPost = async (subreddit: string | string[]): Promise<IPost> => {
   const pickedSub: string = Array.isArray(subreddit) ? getRandomItemFrom(subreddit) : subreddit
-  const response = await makeRequest<RedditListingInterface>(`/r/${pickedSub}/random.json?limit=1`)
+  const response = await makeRequest<RedditListingInterface>(`r/${pickedSub}/random.json?limit=1`)
+  logger.debug('HTTP response', response)
   const children = Array.isArray(response) ? response[0]?.data?.children : response?.data?.children
   const child = Array.isArray(children) ? children[0] : children
-  logger.trace('Response', child.data)
   return child.data
 }
 
@@ -29,7 +29,7 @@ export const getImage = async (subreddit: string | string[], retryLimit: number 
   while (retries < retryLimit) {
     const hasImageURL = /(jpe?g|png|gif)/.test(post?.url ?? '')
     if (hasImageURL) {
-      logger.debug('Got an image!', post?.url)
+      logger.debug('Got an image', post?.url)
       break
     }
     retries += 1
