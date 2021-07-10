@@ -3,9 +3,9 @@
   "version": "2.0.2-0",
   "description": "Random Reddit posts and images",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "start": "ts-node ./misc/test",
     "build": "tsc",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts ."
