@@ -1,6 +1,6 @@
 {
   "name": "random-reddit",
-  "version": "2.0.2-1",
+  "version": "2.0.2-2",
   "description": "Random Reddit posts and images",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
