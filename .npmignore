@@ -10,3 +10,4 @@ lefthook.yml
 .eslintrc.json
 .prettierrc.yml
 tsconfig.json
+package-lock.json
