@@ -19,25 +19,25 @@ export class Logger {
 
   static debug(...input: any[]): void {
     if (this.level <= LogLevel.Debug) {
-      console.debug(`[random-reddit] DEBUG: `, input)
+      console.debug(`[random-reddit] DEBUG`, ...input)
     }
   }
 
   static log(...input: any[]): void {
     if (this.level <= LogLevel.Log) {
-      console.log(`[random-reddit] LOG: `, input)
+      console.log(`[random-reddit] LOG`, ...input)
     }
   }
 
   static error(...input: any[]): void {
     if (this.level <= LogLevel.Error) {
-      console.error(`[random-reddit] ERROR: `, input)
+      console.error(`[random-reddit] ERROR`, ...input)
     }
   }
 
   static warn(...input: any[]): void {
     if (this.level <= LogLevel.Log) {
-      console.warn(`[random-reddit] WARN: `, input)
+      console.warn(`[random-reddit] WARN`, ...input)
     }
   }
 
