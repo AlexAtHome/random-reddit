@@ -1,7 +1,8 @@
 import { RedditListingInterface, ThreadInterface } from 'reddit-interfaces'
 import { IPost } from './interface'
-import { getRandomImageFromGallery, getRandomItemFrom, makeRequest } from './utils'
+import { getRandomImageFromGallery, getRandomItemFrom } from './utils/array'
 import { Logger } from './utils/logger'
+import { makeRequest } from './utils/request'
 
 /**
  * Returns the random post from specified subreddit
