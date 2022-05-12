@@ -25,7 +25,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "consola": "^2.15.3",
     "node-fetch": "^2.6.7"
   },
   "peerDependencies": {

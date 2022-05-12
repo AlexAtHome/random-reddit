@@ -1,6 +1,6 @@
 import { ThreadInterface } from 'reddit-interfaces'
 
-export { LogLevel } from 'consola'
+export { LogLevel } from './utils/logger'
 
 /* eslint-disable camelcase */
 export interface IPost extends ThreadInterface {
