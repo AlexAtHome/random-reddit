@@ -15,29 +15,30 @@ export enum LogLevel {
 }
 
 export class Logger {
+  private static prefix = 'reddit'
   private static level = Logger.getLogLevel();
 
   static debug(...input: any[]): void {
     if (this.level <= LogLevel.Debug) {
-      console.debug(`[random-reddit] DEBUG`, ...input)
+      console.debug(`[${this.prefix}] DEBUG`, ...input)
     }
   }
 
   static log(...input: any[]): void {
     if (this.level <= LogLevel.Log) {
-      console.log(`[random-reddit] LOG`, ...input)
+      console.log(`[${this.prefix}] LOG`, ...input)
     }
   }
 
   static error(...input: any[]): void {
     if (this.level <= LogLevel.Error) {
-      console.error(`[random-reddit] ERROR`, ...input)
+      console.error(`[${this.prefix}] ERROR`, ...input)
     }
   }
 
   static warn(...input: any[]): void {
     if (this.level <= LogLevel.Log) {
-      console.warn(`[random-reddit] WARN`, ...input)
+      console.warn(`[${this.prefix}] WARN`, ...input)
     }
   }
 
