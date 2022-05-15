@@ -19,25 +19,25 @@ export class Logger {
   private static level = Logger.getLogLevel();
 
   static debug(...input: any[]): void {
-    if (this.level <= LogLevel.Debug) {
+    if (this.level >= LogLevel.Debug) {
       console.debug(`[${this.prefix}] DEBUG`, ...input)
     }
   }
 
   static log(...input: any[]): void {
-    if (this.level <= LogLevel.Log) {
+    if (this.level >= LogLevel.Log) {
       console.log(`[${this.prefix}] LOG`, ...input)
     }
   }
 
   static error(...input: any[]): void {
-    if (this.level <= LogLevel.Error) {
+    if (this.level >= LogLevel.Error) {
       console.error(`[${this.prefix}] ERROR`, ...input)
     }
   }
 
   static warn(...input: any[]): void {
-    if (this.level <= LogLevel.Log) {
+    if (this.level >= LogLevel.Log) {
       console.warn(`[${this.prefix}] WARN`, ...input)
     }
   }
