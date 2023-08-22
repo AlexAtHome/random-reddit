@@ -3,6 +3,7 @@ pre-commit:
   commands:
     eslint:
       glob: "*.ts"
-      run:
-        - prettier --write {staged_files}
-        - npm run lint {staged_files}
+      run: npm run lint {staged_files}
+    prettier:
+      glob: "*.ts"
+      run: prettier --write {staged_files}
